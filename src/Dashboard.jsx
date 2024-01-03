@@ -28,9 +28,9 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <div className="top-bar">
-        <div className="menu-icon">Menu Icon</div>
+        <div className="menu-icon">Menu</div>
         <h1 className="study-sphere-logo">Study Sphere</h1>
-        <div className="user-icon">User Icon</div>
+        <div className="user-icon">User</div>
       </div>
 
       <div className="dashboard-content">
