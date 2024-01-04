@@ -7,7 +7,7 @@ const Dashboard = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [newSubject, setNewSubject] = useState({ name: '', progress: '', resources: '' });
 
-  useEffect(() => {
+  useEffect(() => { 
     // Fetch subjects data from the backend API
     fetch('your-backend-api-url')
       .then((response) => response.json())
