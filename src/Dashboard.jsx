@@ -8,7 +8,7 @@ const Dashboard = () => {
   const [newSubject, setNewSubject] = useState({ name: '', progress: '', resources: '' });
 
   useEffect(() => { 
-    // Fetch subjects data from the backend API
+    // Fetch subjects data from the backend API 
     fetch('your-backend-api-url')
       .then((response) => response.json())
       .then((data) => setSubjects(data))
