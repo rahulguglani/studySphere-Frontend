@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './dashboard.css';
+import Topbar from './Topbar';
 
 const Dashboard = () => {
   const [subjects, setSubjects] = useState([]);
@@ -27,16 +28,10 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <div className="top-bar">
-        <div className="menu-icon">Menu Icon</div>
-        <h1 className="study-sphere-logo">Study Sphere</h1>
-        <div className="user-icon">User Icon</div>
-      </div>
-
+      <Topbar />
       <div className="dashboard-content">
         <h1 className="dashboard-heading">Dashboard</h1>
         <div className="subjects-list">
-          <h2>Your Subjects</h2>
           <table>
             <thead>
               <tr>
@@ -56,7 +51,9 @@ const Dashboard = () => {
             </tbody>
           </table>
         </div>
-        <button onClick={handleAddSubject}>Add Subject</button>
+        <div className='add-subject'>
+          <button onClick={handleAddSubject}>Add Subject</button>
+        </div>
       </div>
 
       {showPopup && (
