@@ -5,13 +5,15 @@
     padding: 15px;
     background: #c6c6c6;
   } */
-  #root{
+
+  .dashboard-container{
     height: 100vh;
     justify-content: start;
     width: 100%;
     max-width: none;
     padding: 0%;
   }
+
   body {
     display: block;
     margin: 0;
@@ -88,4 +90,13 @@
 
   .add-subject{
     padding-top: 50px;
+  }
+
+  .add-resource{
+    display: inline-block;
+    margin-left: 1rem;
+  }
+
+  .add-resource-btn{
+    border-radius: 100%;
   }

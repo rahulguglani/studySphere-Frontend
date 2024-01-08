@@ -1,31 +1,75 @@
 import { useState, useEffect } from 'react';
 import './dashboard.css';
 import Topbar from './Topbar';
+import Modal from './components/Modal';
 
 const Dashboard = () => {
   const [subjects, setSubjects] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
-  const [newSubject, setNewSubject] = useState({ name: '', progress: '', resources: '' });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [rerender, setRerender] = useState(1);
 
+  const reRenderNow = ()=>{
+    console.log('should re render now');
+    setTimeout(() => {
+    setRerender(rerender + 1);
+  }, 500); // Set a delay of 500ms
+  };
   useEffect(() => {
-    // Fetch subjects data from the backend API
-    fetch('your-backend-api-url')
+    console.log('here again')
+    fetch('http://localhost:3000/dashboard/data', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    })
       .then((response) => response.json())
-      .then((data) => setSubjects(data))
-      .catch((error) => console.error(error));
-  }, []);
+      .then((data) => {
+        setSubjects(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  }, [rerender]);
 
-  const handleAddSubject = () => {
-    setShowPopup(true);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  const handleSliderChange = (subjectId, newProgress) => {
+    // Update progress in the backend
+    fetch('http://localhost:3000/dashboard/update-progress', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      body: JSON.stringify({ subjectId, newProgress }),
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data); // Log the response from the server
+      // Update the subjects state with the new data from the server
+      setSubjects((prevSubjects) =>
+        prevSubjects.map((subject) =>
+          subject.subject_id === subjectId ? { ...subject, user_progress: newProgress } : subject
+        )
+      );
+    })
+    .catch((error) => console.error(error));
   };
-
-  const handleNewSubjectSubmit = (e) => {
-    e.preventDefault();
-    console.log('Adding a new subject:', newSubject);
-    // Add logic to update subjects state or send to the backend
-    setShowPopup(false);
-  };
-
   return (
     <div className="dashboard-container">
       <Topbar />
@@ -42,46 +86,32 @@ const Dashboard = () => {
             </thead>
             <tbody>
               {subjects.map((subject) => (
-                <tr key={subject.id}>
-                  <td>{subject.name}</td>
-                  <td>{subject.progress}%</td>
-                  <td>{subject.resources.join(', ')}</td>
+                <tr key={subject.subject_id}>
+                  <td>{subject.subject_name}</td>
+                  <td>
+                  <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={subject.user_progress}
+                      onChange={(e) => handleSliderChange(subject.subject_id, e.target.value)}
+                    />
+                  {subject.user_progress}%
+                  </td>
+                  <td>{subject.resource_url}
+                      <div className='add-resource'>
+                        <Modal modalName = "+" buttonName="add-resource-btn" data ="addResource" rerender = {reRenderNow} arg = {subject.subject_id} />
+                      </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         <div className='add-subject'>
-          <button onClick={handleAddSubject}>Add Subject</button>
+          <Modal modalName = "Add Subject" data = "addSubject" rerender = {reRenderNow} />
         </div>
       </div>
-
-      {showPopup && (
-        <div className="popup">
-          <h2>Add New Subject</h2>
-          <form onSubmit={handleNewSubjectSubmit}>
-            <input
-              type="text"
-              placeholder="Subject Name"
-              value={newSubject.name}
-              onChange={(e) => setNewSubject({ ...newSubject, name: e.target.value })}
-            />
-            <input
-              type="text"
-              placeholder="Progress"
-              value={newSubject.progress}
-              onChange={(e) => setNewSubject({ ...newSubject, progress: e.target.value })}
-            />
-            <input
-              type="text"
-              placeholder="Resources"
-              value={newSubject.resources}
-              onChange={(e) => setNewSubject({ ...newSubject, resources: e.target.value })}
-            />
-            <button type="submit">Add</button>
-          </form>
-        </div>
-      )}
     </div>
   );
 };
