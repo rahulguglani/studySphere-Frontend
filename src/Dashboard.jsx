@@ -70,6 +70,55 @@ const Dashboard = () => {
     })
     .catch((error) => console.error(error));
   };
+
+  const handleRemoveResource = (subjectId, resourceIndex) => {
+    // Call the API to remove the resource
+    fetch('http://localhost:3000/dashboard/remove-resource', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      body: JSON.stringify({ subjectId, resourceIndex }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to remove resource');
+        }
+        // If successful, update the state or trigger a re-render as needed
+        // For example, you can fetch updated data from the server
+        reRenderNow();
+      })
+      .catch((error) => {
+        console.error(error);
+        // Handle the error, e.g., display an error message to the user
+      });
+  };
+
+  const handleRemoveSubject = (subjectId) => {
+    // Call the API to remove the subject
+    fetch('http://localhost:3000/dashboard/remove-subject', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      body: JSON.stringify({ subjectId }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to remove subject');
+        }
+        // If successful, update the state or trigger a re-render as needed
+        // For example, you can fetch updated data from the server
+        reRenderNow();
+      })
+      .catch((error) => {
+        console.error(error);
+        // Handle the error, e.g., display an error message to the user
+      });
+  };
+  
   return (
     <div className="dashboard-container">
       <Topbar />
@@ -82,6 +131,7 @@ const Dashboard = () => {
                 <th>Subject Name</th>
                 <th>Progress</th>
                 <th>Resources</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -89,19 +139,32 @@ const Dashboard = () => {
                 <tr key={subject.subject_id}>
                   <td>{subject.subject_name}</td>
                   <td>
-                  <input
+                    <input
                       type="range"
                       min="0"
                       max="100"
                       value={subject.user_progress}
                       onChange={(e) => handleSliderChange(subject.subject_id, e.target.value)}
                     />
-                  {subject.user_progress}%
+                    {subject.user_progress}%
                   </td>
-                  <td>{subject.resource_url}
-                      <div className='add-resource'>
-                        <Modal modalName = "+" buttonName="add-resource-btn" data ="addResource" rerender = {reRenderNow} arg = {subject.subject_id} />
+                  <td>
+                    {subject.resource_urls.map((resource, index) => (
+                      <div key={index} className="resource-item">
+                        {resource}
+                        <button className="remove-resource-btn" onClick={() => handleRemoveResource(subject.subject_id, index)}>
+                          -
+                        </button>
                       </div>
+                    ))}
+                    <div className='add-resource'>
+                      <Modal modalName="+" buttonName="add-resource-btn" data="addResource" rerender={reRenderNow} arg={subject.subject_id} />
+                    </div>
+                  </td>
+                  <td>
+                    <button onClick={() => handleRemoveSubject(subject.subject_id)}>
+                      Remove Subject
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -109,11 +172,12 @@ const Dashboard = () => {
           </table>
         </div>
         <div className='add-subject'>
-          <Modal modalName = "Add Subject" data = "addSubject" rerender = {reRenderNow} />
+          <Modal modalName="Add Subject" data="addSubject" rerender={reRenderNow} />
         </div>
       </div>
     </div>
   );
+  
 };
 
 export default Dashboard;

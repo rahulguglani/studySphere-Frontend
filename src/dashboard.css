@@ -63,6 +63,7 @@
     margin-right: 10px;
     margin-block-start: auto;
     margin-block-end: auto;
+    display: flex;
   }
   
   .dashboard-content {
@@ -98,5 +99,16 @@
   }
 
   .add-resource-btn{
+    padding: 9.6px 14.8435px;
     border-radius: 100%;
+  }
+
+  .remove-resource-btn{
+    padding: 9.6px 17.2px;
+    border-radius: 100%;
+    margin-left: 1rem;
+  }
+
+  .logout-btn{
+    margin-left: 5px;
   }
