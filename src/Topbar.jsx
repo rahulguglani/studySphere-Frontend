@@ -19,6 +19,23 @@ const Topbar = ()=>{
     console.log('Logout successful');
     navigate('/');
   }
+
+  const openFriendsPage = ()=>{
+    navigate('/friends');
+  }
+  
+  const openDashboardPage = ()=>{
+    navigate('/dashboard');
+  }
+  
+  const openProfilePage = ()=>{
+    navigate('/profile');
+  }
+  
+  const openComparePage = ()=>{
+    navigate('/compare');
+  }
+  
   useEffect(() => {
     // Fetch user details from the backend API using the access token
     fetch('http://localhost:3000/student/getDetails', {
@@ -47,10 +64,10 @@ const Topbar = ()=>{
     </div>
     <div className={`menu-panel ${isMenuOpen ? 'open' : ''}`}>
         <div className="menu-options">
-          <div className="menu-option">Dashboard</div>
-          <div className="menu-option">My Profile</div>
-          <div className="menu-option">Friends</div>
-          <div className="menu-option">Compare</div>
+          <div className="menu-option" onClick={openDashboardPage}>Dashboard</div>
+          <div className="menu-option" onClick={openProfilePage}>My Profile</div>
+          <div className="menu-option" onClick={openFriendsPage}>Friends</div>
+          <div className="menu-option" onClick={openComparePage}>Compare</div>
         </div>
       </div>
     </div>

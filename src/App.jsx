@@ -3,7 +3,8 @@ import LandingPage from './LandingPage';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import './App.css'
-import Dashboard from './dashboard';
+import Dashboard from './Dashboard';
+import Friends from './Friends';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <Route path="/login" element={<LoginForm />} />
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path='/friends' element={<Friends />} />
     </Routes>
   </Router>
   </div>

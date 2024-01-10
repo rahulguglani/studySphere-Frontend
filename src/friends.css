@@ -1,0 +1,7 @@
+.friends-container{
+    height: 100vh;
+    justify-content: start;
+    width: 100%;
+    max-width: none;
+    padding: 0%;
+  }
