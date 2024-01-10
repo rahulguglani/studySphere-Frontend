@@ -118,7 +118,7 @@ const Dashboard = () => {
         // Handle the error, e.g., display an error message to the user
       });
   };
-  
+
   return (
     <div className="dashboard-container">
       <Topbar />
