@@ -10,13 +10,11 @@ const Dashboard = () => {
   const [rerender, setRerender] = useState(1);
 
   const reRenderNow = ()=>{
-    console.log('should re render now');
     setTimeout(() => {
     setRerender(rerender + 1);
   }, 500); // Set a delay of 500ms
   };
   useEffect(() => {
-    console.log('here again')
     fetch('http://localhost:3000/dashboard/data', {
       method: 'GET',
       headers: {

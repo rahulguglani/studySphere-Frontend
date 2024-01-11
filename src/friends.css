@@ -1,7 +1,52 @@
 .friends-container{
     height: 100vh;
-    justify-content: start;
+    justify-content: center;
     width: 100%;
     max-width: none;
     padding: 0%;
+    align-items: center;
   }
+
+  .tab-buttons {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+
+  .add-friend-section {
+    flex: 1;
+  }
+  
+  .search-section {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  .current-friends-section {
+    flex: 1;
+  }
+  
+  .friend-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .pending-requests-section {
+    flex: 1;
+  }
+  
+  .friend-request-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .friend-request-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
