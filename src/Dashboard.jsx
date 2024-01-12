@@ -2,19 +2,49 @@ import { useState, useEffect } from 'react';
 import './dashboard.css';
 import Topbar from './Topbar';
 import Modal from './components/Modal';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [rerender, setRerender] = useState(1);
+  const navigate = useNavigate();
 
   const reRenderNow = ()=>{
     setTimeout(() => {
     setRerender(rerender + 1);
   }, 500); // Set a delay of 500ms
   };
+
+  const checkToken = () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      navigate('/');
+      return false;
+    }
+    fetch('http://localhost:3000/student/checkToken', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        localStorage.removeItem('accessToken');
+        navigate('/');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data.userId);
+    })
+    .catch(error => {
+      console.error('Error checking token:', error);
+    });
+  }
+
   useEffect(() => {
+    checkToken();
     fetch('http://localhost:3000/dashboard/data', {
       method: 'GET',
       headers: {

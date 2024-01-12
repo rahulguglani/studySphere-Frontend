@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Topbar from './Topbar';
 import './friends.css';
 
@@ -10,16 +11,42 @@ const Friends = () => {
   const [searchEmail, setSearchEmail] = useState('');
   const [foundUser, setFoundUser] = useState(null);
   const [rerender, setRerender] = useState(1);
-
+  const navigate = useNavigate();
   const reRenderNow = ()=>{
     setTimeout(() => {
     setRerender(rerender + 1);
   }, 500); // Set a delay of 500ms
   };
+  function checkToken() {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      navigate('/');
+      return false;
+    }
+    fetch('http://localhost:3000/student/checkToken', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        localStorage.removeItem('accessToken');
+        navigate('/');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data.userId);
+    })
+    .catch(error => {
+      console.error('Error checking token:', error);
+    });
+  }
 
   useEffect(() => {
     // Fetch data for pending friend requests and current friends
     // Replace the placeholder URLs with your actual API endpoints
+    checkToken();
     fetch('http://localhost:3000/friends/friends', {
       method: 'GET',
       headers: {
@@ -205,8 +232,6 @@ const Friends = () => {
     }
   };
   
-  console.log(requestedFriends);
-
   return (
     <div className='friends-container'>
         

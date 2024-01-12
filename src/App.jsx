@@ -6,6 +6,7 @@ import './App.css'
 import Dashboard from './Dashboard';
 import Friends from './Friends';
 import MyProfile from './MyProfile';
+import Compare from './Compare';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path='/friends' element={<Friends />} />
       <Route path='/profile' element={<MyProfile/>} />
+      <Route path='/compare' element={<Compare/>} />
     </Routes>
   </Router>
   </div>
